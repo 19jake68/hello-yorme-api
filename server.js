@@ -10,9 +10,9 @@ const app = express()
 const i18n = require('i18n')
 const initMongo = require('./config/mongo')
 const path = require('path')
-const https = require('https');
-const fs = require('fs');
-const hsts = require('hsts');
+const https = require('https')
+const fs = require('fs')
+const hsts = require('hsts')
 
 // Setup express server port from ENV, default: 3000
 app.set('port', process.env.PORT || 3000)
@@ -60,36 +60,38 @@ i18n.configure({
 app.use(i18n.init)
 
 // Certificate
-const privateKey = fs.readFileSync(process.env.CERT_PRIVKEY_PATH, 'utf8');
-const certificate = fs.readFileSync(process.env.CERT_PATH, 'utf8');
-const ca = fs.readFileSync(process.env.CERT_CHAIN_PATH, 'utf8');
-const credentials = {
-  key: privateKey,
-  cert: certificate,
-  ca: ca
-};
+const key = fs.readFileSync(process.env.CERT_PRIVKEY_PATH, 'utf8')
+const cert = fs.readFileSync(process.env.CERT_PATH, 'utf8')
+const ca = fs.readFileSync(process.env.CERT_CHAIN_PATH, 'utf8')
+const credentials = { key, cert, ca }
 
 // Init all other stuff
 app.use(cors())
 app.use(passport.initialize())
 app.use(compression())
 app.use(helmet())
-app.use(hsts({
-  maxAge: 15552000,
-  includeSubDomains:true,
-  force: true
-}));
+app.use(
+  hsts({
+    maxAge: 15552000,
+    includeSubDomains: true,
+    force: true
+  })
+)
 app.use(express.static('public'))
 app.set('views', path.join(__dirname, 'views'))
 app.engine('html', require('ejs').renderFile)
 app.set('view engine', 'html')
 app.use(require('./app/routes'))
 
-const httpsServer = https.createServer(credentials, app);
-httpsServer.listen(app.get('port'), () => {
-  console.log('Environment:', process.env.NODE_ENV);
-  console.log('Express listening on port:', app.get('port'));
-});
+// const httpsServer = https.createServer(credentials, app)
+// httpsServer.listen(app.get('port'), () => {
+//   console.log('Environment:', process.env.NODE_ENV)
+//   console.log('Express listening on port:', app.get('port'))
+// })
+app.listen(app.get('port'), () => {
+  console.log('Environment:', process.env.NODE_ENV)
+  console.log('Express listening on port:', app.get('port'))
+})
 
 // Init MongoDB
 initMongo()
