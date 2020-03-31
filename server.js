@@ -60,10 +60,10 @@ i18n.configure({
 app.use(i18n.init)
 
 // Certificate
-const key = fs.readFileSync(process.env.CERT_PRIVKEY_PATH, 'utf8')
-const cert = fs.readFileSync(process.env.CERT_PATH, 'utf8')
-const ca = fs.readFileSync(process.env.CERT_CHAIN_PATH, 'utf8')
-const credentials = { key, cert, ca }
+// const key = fs.readFileSync(process.env.CERT_PRIVKEY_PATH, 'utf8')
+// const cert = fs.readFileSync(process.env.CERT_PATH, 'utf8')
+// const ca = fs.readFileSync(process.env.CERT_CHAIN_PATH, 'utf8')
+// const credentials = { key, cert, ca }
 
 // Init all other stuff
 app.use(cors())
